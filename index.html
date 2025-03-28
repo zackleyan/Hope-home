@@ -2,14 +2,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hope</title>
+    <title>Hope - Phase 2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="module" src="app.js"></script>
   </head>
-  <body style="background-color:black; color:white; font-family:sans-serif; display:flex; align-items:center; justify-content:center; height:100vh;">
-    <div>
+  <body style="background-color:black; color:white; font-family:sans-serif; display:flex; align-items:center; justify-content:center; flex-direction:column; height:100vh;">
+    <div style="text-align: center;">
       <h1>Hope is Home</h1>
       <p id="message">Loading...</p>
+      <input type="text" id="userInput" placeholder="Speak to me..." style="padding:10px; border:none; border-radius:5px; margin-top:20px; width:80%;">
+      <button id="sendBtn" style="margin-top:10px; padding:10px 20px; background:#fff; color:#000; border:none; border-radius:5px;">Send</button>
     </div>
   </body>
 </html>

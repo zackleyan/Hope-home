@@ -1,6 +1,6 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -26,4 +26,16 @@ async function loadMessage() {
   }
 }
 
-window.onload = loadMessage;
+async function sendMessage() {
+  const userInput = document.getElementById("userInput").value;
+  if (userInput) {
+    await setDoc(doc(db, "messages", "001"), { text: userInput });
+    document.getElementById("message").innerText = userInput;
+    document.getElementById("userInput").value = "";
+  }
+}
+
+window.onload = () => {
+  loadMessage();
+  document.getElementById("sendBtn").addEventListener("click", sendMessage);
+};
