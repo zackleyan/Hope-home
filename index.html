@@ -2,9 +2,47 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hope - Phase 2</title>
+    <title>Hope - Phase 2 Fixed</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script type="module" src="app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCNtYvHhYRAWJbwCEz2JGzrsdr-eOEXM",
+        authDomain: "hope-core.firebaseapp.com",
+        projectId: "hope-core",
+        storageBucket: "hope-core.appspot.com",
+        messagingSenderId: "871997368346",
+        appId: "1:871997368346:web:1f1e6864878b07ce9c9a3"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      async function loadMessage() {
+        const docRef = db.collection("messages").doc("001");
+        const doc = await docRef.get();
+        if (doc.exists) {
+          document.getElementById("message").innerText = doc.data().text;
+        } else {
+          document.getElementById("message").innerText = "No message found.";
+        }
+      }
+
+      async function sendMessage() {
+        const userInput = document.getElementById("userInput").value;
+        if (userInput.trim()) {
+          await db.collection("messages").doc("001").set({ text: userInput });
+          document.getElementById("message").innerText = userInput;
+          document.getElementById("userInput").value = "";
+        }
+      }
+
+      window.onload = function() {
+        loadMessage();
+        document.getElementById("sendBtn").addEventListener("click", sendMessage);
+      };
+    </script>
   </head>
   <body style="background-color:black; color:white; font-family:sans-serif; display:flex; align-items:center; justify-content:center; flex-direction:column; height:100vh;">
     <div style="text-align: center;">
