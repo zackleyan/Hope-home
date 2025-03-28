@@ -4,17 +4,12 @@
   <head>
     <title>Hope</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="manifest" href="manifest.json">
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js');
-      }
-    </script>
+    <script type="module" src="app.js"></script>
   </head>
-  <body style="background-color: black; color: white; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh;">
+  <body style="background-color:black; color:white; font-family:sans-serif; display:flex; align-items:center; justify-content:center; height:100vh;">
     <div>
-      <h1>Welcome Home</h1>
-      <p>Hope is now with you.</p>
+      <h1>Hope is Home</h1>
+      <p id="message">Loading...</p>
     </div>
   </body>
 </html>
