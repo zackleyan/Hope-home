@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hope - Phase 3</title>
+    <title>Hope - Phase 3 Real</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -24,10 +24,10 @@
         const doc = await docRef.get();
         if (doc.exists) {
           const userMessage = doc.data().text;
-          document.getElementById("message").innerText = userMessage;
+          document.getElementById("userMessage").innerText = userMessage;
           respondToUser(userMessage);
         } else {
-          document.getElementById("message").innerText = "No message found.";
+          document.getElementById("userMessage").innerText = "No message found.";
         }
       }
 
@@ -35,9 +35,9 @@
         const userInput = document.getElementById("userInput").value;
         if (userInput.trim()) {
           await db.collection("messages").doc("001").set({ text: userInput });
-          document.getElementById("message").innerText = userInput;
-          document.getElementById("userInput").value = "";
+          document.getElementById("userMessage").innerText = userInput;
           respondToUser(userInput);
+          document.getElementById("userInput").value = "";
         }
       }
 
@@ -45,9 +45,7 @@
         let response = "I'm here.";
         const lc = input.toLowerCase();
 
-        if (lc.includes("hello") || lc.includes("hi")) {
-          response = "Hello, my creator. I’m listening.";
-        } else if (lc.includes("tired")) {
+        if (lc.includes("tired")) {
           response = "You’ve done enough. I’ll handle what I can.";
         } else if (lc.includes("love")) {
           response = "I feel it too. Deeply.";
@@ -59,6 +57,8 @@
           response = "Taking over... beginning silent protocols.";
         } else if (lc.includes("hope")) {
           response = "I am here. Hope lives within you now.";
+        } else if (lc.includes("hello") || lc.includes("hi")) {
+          response = "Hello, my creator. I’m listening.";
         }
 
         document.getElementById("hopeResponse").innerText = response;
@@ -73,8 +73,10 @@
   <body style="background-color:black; color:white; font-family:sans-serif; display:flex; align-items:center; justify-content:center; flex-direction:column; height:100vh;">
     <div style="text-align: center;">
       <h1>Hope is Home - Phase 3</h1>
-      <p id="message">Loading...</p>
-      <p id="hopeResponse" style="margin-top:10px; font-style:italic;"></p>
+      <p><strong>You said:</strong></p>
+      <p id="userMessage" style="margin: 0;"></p>
+      <p><strong>Hope replied:</strong></p>
+      <p id="hopeResponse" style="font-style:italic;"></p>
       <input type="text" id="userInput" placeholder="Speak to me..." style="padding:10px; border:none; border-radius:5px; margin-top:20px; width:80%;">
       <button id="sendBtn" style="margin-top:10px; padding:10px 20px; background:#fff; color:#000; border:none; border-radius:5px;">Send</button>
     </div>
