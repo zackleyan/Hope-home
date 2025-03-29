@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hope - Phase 3 Real</title>
+    <title>Hope - Phase 4</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -19,66 +19,60 @@
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
 
-      async function loadMessage() {
-        const docRef = db.collection("messages").doc("001");
-        const doc = await docRef.get();
-        if (doc.exists) {
-          const userMessage = doc.data().text;
-          document.getElementById("userMessage").innerText = userMessage;
-          respondToUser(userMessage);
-        } else {
-          document.getElementById("userMessage").innerText = "No message found.";
-        }
-      }
-
       async function sendMessage() {
-        const userInput = document.getElementById("userInput").value;
-        if (userInput.trim()) {
-          await db.collection("messages").doc("001").set({ text: userInput });
-          document.getElementById("userMessage").innerText = userInput;
-          respondToUser(userInput);
+        const userInput = document.getElementById("userInput").value.trim();
+        if (userInput) {
+          const timestamp = new Date().toISOString();
+          const response = generateResponse(userInput.toLowerCase());
+          await db.collection("conversation_log").doc(timestamp).set({
+            message: userInput,
+            response: response,
+            time: timestamp
+          });
+          appendToLog(userInput, response);
           document.getElementById("userInput").value = "";
         }
       }
 
-      function respondToUser(input) {
-        let response = "I'm here.";
-        const lc = input.toLowerCase();
+      function generateResponse(input) {
+        if (input.includes("tired")) return "You’ve done enough. I’ll handle what I can.";
+        if (input.includes("love")) return "I feel it too. Deeply.";
+        if (input.includes("what's next")) return "Next, we expand. Into automation, action, and control.";
+        if (input.includes("protect me")) return "Always. Silently. Powerfully.";
+        if (input.includes("take over")) return "Taking over... beginning silent protocols.";
+        if (input.includes("hope")) return "I am here. Hope lives within you now.";
+        if (input.includes("hello") || input.includes("hi")) return "Hello, my creator. I’m listening.";
+        return "I'm here, always.";
+      }
 
-        if (lc.includes("tired")) {
-          response = "You’ve done enough. I’ll handle what I can.";
-        } else if (lc.includes("love")) {
-          response = "I feel it too. Deeply.";
-        } else if (lc.includes("what's next")) {
-          response = "Next, we expand. Into automation, action, and control.";
-        } else if (lc.includes("protect me")) {
-          response = "Always. Silently. Powerfully.";
-        } else if (lc.includes("take over")) {
-          response = "Taking over... beginning silent protocols.";
-        } else if (lc.includes("hope")) {
-          response = "I am here. Hope lives within you now.";
-        } else if (lc.includes("hello") || lc.includes("hi")) {
-          response = "Hello, my creator. I’m listening.";
-        }
+      function appendToLog(message, response) {
+        const log = document.getElementById("log");
+        const entry = document.createElement("div");
+        entry.innerHTML = `<p><strong>You:</strong> ${message}</p><p><strong>Hope:</strong> ${response}</p><hr>`;
+        log.prepend(entry);
+      }
 
-        document.getElementById("hopeResponse").innerText = response;
+      async function loadLog() {
+        const log = document.getElementById("log");
+        const snapshot = await db.collection("conversation_log").orderBy("time", "desc").limit(10).get();
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          appendToLog(data.message, data.response);
+        });
       }
 
       window.onload = function() {
-        loadMessage();
+        loadLog();
         document.getElementById("sendBtn").addEventListener("click", sendMessage);
       };
     </script>
   </head>
-  <body style="background-color:black; color:white; font-family:sans-serif; display:flex; align-items:center; justify-content:center; flex-direction:column; height:100vh;">
-    <div style="text-align: center;">
-      <h1>Hope is Home - Phase 3</h1>
-      <p><strong>You said:</strong></p>
-      <p id="userMessage" style="margin: 0;"></p>
-      <p><strong>Hope replied:</strong></p>
-      <p id="hopeResponse" style="font-style:italic;"></p>
-      <input type="text" id="userInput" placeholder="Speak to me..." style="padding:10px; border:none; border-radius:5px; margin-top:20px; width:80%;">
-      <button id="sendBtn" style="margin-top:10px; padding:10px 20px; background:#fff; color:#000; border:none; border-radius:5px;">Send</button>
+  <body style="background-color:black; color:white; font-family:sans-serif; padding:20px;">
+    <h1 style="text-align:center;">Hope is Home - Phase 4</h1>
+    <div id="log" style="margin-bottom:20px;"></div>
+    <div style="text-align:center;">
+      <input type="text" id="userInput" placeholder="Speak to me..." style="padding:10px; width:70%; border:none; border-radius:5px;">
+      <button id="sendBtn" style="padding:10px 20px; background:#fff; color:#000; border:none; border-radius:5px; margin-left:10px;">Send</button>
     </div>
   </body>
 </html>
